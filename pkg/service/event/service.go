@@ -16,9 +16,9 @@ func NewEventService(db *gorm.DB) *EventService {
 	}
 }
 
-func (s *EventService) GetWeeklyEventsByCity(city string) []WeeklyEvent {
+func (s *EventService) GetWeeklyEventsByCity(cityId string) []WeeklyEvent {
 	var event []WeeklyEvent
-	s.db.InnerJoins("Store", s.db.Statement.Where(&store.Store{City: city})).Find(&event)
+	s.db.InnerJoins("Store", s.db.Statement.Where(&store.Store{CityId: cityId})).Find(&event)
 	return event
 }
 
@@ -29,9 +29,9 @@ func (s *EventService) GetWeeklyEventsByStore(storeId string) []WeeklyEvent {
 	return event
 }
 
-func (s *EventService) GetWeeklyEventsByCityAndGame(city string, gameId string) []WeeklyEvent {
+func (s *EventService) GetWeeklyEventsByCityAndGame(cityId string, gameId string) []WeeklyEvent {
 	var event []WeeklyEvent
-	s.db.InnerJoins("Store", s.db.Statement.Where(&store.Store{City: city})).
+	s.db.InnerJoins("Store", s.db.Statement.Where(&store.Store{CityId: cityId})).
 		InnerJoins("Game", s.db.Statement.Where(&game.Game{Id: gameId})).Find(&event)
 	return event
 }
