@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/pgallardor/dondejugar/pkg/service/city"
 	"github.com/pgallardor/dondejugar/pkg/service/event"
 	"github.com/pgallardor/dondejugar/pkg/service/game"
 	"github.com/pgallardor/dondejugar/pkg/service/store"
@@ -25,6 +26,7 @@ func NewAPIServer(addr string, db *gorm.DB) *APIServer {
 func (api *APIServer) Run() {
 	fmt.Println("Starting DondeJugar API")
 	mux := http.NewServeMux()
+	cityHandler := city.NewHandler(api.db)
 	storeHandler := store.NewHandler(api.db)
 	gameHandler := game.NewHandler(api.db)
 	eventHandler := event.NewHandler(api.db)
@@ -37,6 +39,7 @@ func (api *APIServer) Run() {
 		}
 	})
 
+	cityHandler.RegisterRoutes(mux)
 	storeHandler.RegisterRoutes(mux)
 	gameHandler.RegisterRoutes(mux)
 	eventHandler.RegisterRoutes(mux)
